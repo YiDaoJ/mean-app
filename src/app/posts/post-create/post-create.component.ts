@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { Post } from 'src/types/types';
 
 @Component({
   selector: 'app-post-create',
@@ -6,16 +8,13 @@ import { Component, EventEmitter, Output } from '@angular/core';
   styleUrls: ['./post-create.component.css'],
 })
 export class PostCreateComponent {
-  enteredTitle = '';
-  enteredContent = '';
-
   @Output()
-  postCreated = new EventEmitter(); // lift to parent component app
+  postCreated = new EventEmitter<Post>(); // lift to parent component app
 
-  onAddPost() {
+  onAddPost(form: NgForm) {
     const newPost = {
-      title: this.enteredTitle,
-      content: this.enteredContent,
+      title: form.value.title,
+      content: form.value.content,
     };
     this.postCreated.emit(newPost);
   }
