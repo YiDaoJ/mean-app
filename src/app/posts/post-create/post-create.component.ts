@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Post } from 'src/types/types';
+import { PostsService } from '../posts.service';
 
 @Component({
   selector: 'app-post-create',
@@ -8,14 +8,19 @@ import { Post } from 'src/types/types';
   styleUrls: ['./post-create.component.css'],
 })
 export class PostCreateComponent {
-  @Output()
-  postCreated = new EventEmitter<Post>(); // lift to parent component app
+  constructor(private postsService: PostsService) {}
 
   onAddPost(form: NgForm) {
+    if (form.invalid) {
+      return;
+    }
+
     const newPost = {
       title: form.value.title,
       content: form.value.content,
     };
-    this.postCreated.emit(newPost);
+
+    this.postsService.addPost(newPost);
+    form.resetForm();
   }
 }
